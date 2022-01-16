@@ -1,11 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
+import { Customer } from './entities/customer.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CustomerService {
+  constructor(
+    @InjectRepository(Customer)
+    private costumerRepository: Repository<Customer>,
+  ) {}
   create(createCustomerDto: CreateCustomerDto) {
-    return 'This action adds a new customer';
+    return {
+      id: 'valid uuid',
+      name: 'valid name',
+      email: 'valid@email.com',
+      password: 'validPassword',
+      phoneNumber: '53991826270',
+    };
   }
 
   findAll() {
