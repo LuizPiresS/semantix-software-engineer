@@ -1,0 +1,19 @@
+{
+  "name": "semantix-backend-code-challenge",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "application",
+  "workspaceFolder": "/workspace",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/zsh"
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "prettier.prettier-vscode",
+    "streetsidesoftware.code-spell-checker",
+    "streetsidesoftware.code-spell-checker-portuguese-brazilian",
+    "usernamehw.errorlens",
+    "editorconfig.editorconfig",
+    "visualstudioexptteam.vscodeintellicode"
+  ],
+  "remoteUser": "node"
+}
