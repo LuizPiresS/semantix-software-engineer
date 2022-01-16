@@ -1,9 +1,10 @@
+import { CustomerService } from './customer/customer.service';
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { configService } from './config/config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerModule } from './customer/customer.module';
+import { Customer } from './customer/entities/customer.entity';
 
 @Module({
   imports: [
@@ -11,10 +12,12 @@ import { CustomerModule } from './customer/customer.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     CustomerModule,
+    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
+    TypeOrmModule.forFeature([Customer]),
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [CustomerService],
+  exports: [CustomerService],
 })
 export class AppModule {}
