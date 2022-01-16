@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
@@ -7,18 +7,24 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class CustomerService {
+  logger = new Logger(CustomerService.name);
   constructor(
     @InjectRepository(Customer)
-    private costumerRepository: Repository<Customer>,
+    private customerRepository: Repository<Customer>,
   ) {}
-  create(createCustomerDto: CreateCustomerDto) {
-    return {
-      id: 'valid uuid',
-      name: 'valid name',
-      email: 'valid@email.com',
-      password: 'validPassword',
-      phoneNumber: '53991826270',
-    };
+  async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
+    if (
+      !createCustomerDto.name ||
+      !createCustomerDto.email ||
+      !createCustomerDto.password ||
+      !createCustomerDto.phoneNumber
+    ) {
+      throw new BadRequestException('Missing data');
+    }
+
+    return this.customerRepository.save(
+      this.customerRepository.create(createCustomerDto),
+    );
   }
 
   findAll() {
