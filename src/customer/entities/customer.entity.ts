@@ -1,6 +1,15 @@
 import { Matches } from 'class-validator';
-import { RegexHelper } from 'src/helpers/regex.helper';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { RegexHelper } from '../../helpers/regex.helper';
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { hashSync } from 'bcrypt';
 
 @Entity({ name: 'customers' })
 export class Customer {
@@ -19,4 +28,18 @@ export class Customer {
   @Column()
   @Matches(RegexHelper.password)
   password: string;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: string;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: string;
+
+  @DeleteDateColumn({ name: 'deleted_at' })
+  deletedAt: string;
+
+  @BeforeInsert()
+  hashPassword() {
+    this.password = hashSync(this.password, 13);
+  }
 }
