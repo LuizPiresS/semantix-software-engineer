@@ -8,6 +8,13 @@ import { Customer } from './entities/customer.entity';
 describe('CustomerService', () => {
   let customerService: CustomerService;
   let customerRepository: Repository<Customer>;
+  const mockedCustomer = {
+    id: 'valid uuid',
+    name: 'valid name',
+    email: 'valid@email.com',
+    password: 'validPassword',
+    phoneNumber: '53991826270',
+  };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -15,20 +22,10 @@ describe('CustomerService', () => {
         {
           provide: getRepositoryToken(Customer),
           useValue: {
-            create: jest.fn().mockReturnValue({
-              id: 'valid uuid',
-              name: 'valid name',
-              email: 'valid@email.com',
-              password: 'validPassword',
-              phoneNumber: '53991826270',
-            }),
-            save: jest.fn().mockResolvedValue({
-              id: 'valid uuid',
-              name: 'valid name',
-              email: 'valid@email.com',
-              password: 'validPassword',
-              phoneNumber: '53991826270',
-            }),
+            create: jest.fn().mockReturnValue(mockedCustomer),
+            save: jest.fn().mockResolvedValue(mockedCustomer),
+            find: jest.fn().mockReturnValue([mockedCustomer]),
+            findOne: jest.fn().mockReturnValue(mockedCustomer),
           },
         },
       ],
@@ -119,6 +116,14 @@ describe('CustomerService', () => {
       const result = customerService.create(mockRequest);
 
       await expect(result).rejects.toThrow();
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return all customers', async () => {
+      const result = await customerService.findAll();
+
+      expect(result).toEqual([mockedCustomer]);
     });
   });
 });
