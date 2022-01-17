@@ -1,3 +1,5 @@
+import { Matches } from 'class-validator';
+import { RegexHelper } from 'src/helpers/regex.helper';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'customers' })
@@ -12,11 +14,9 @@ export class Customer {
   email: string;
 
   @Column()
-  phone: string;
+  phoneNumber: string;
 
   @Column()
-  address: string;
-
-  @Column()
+  @Matches(RegexHelper.password)
   password: string;
 }
