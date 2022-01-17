@@ -28,18 +28,18 @@ export class CustomerService {
   }
 
   findAll() {
-    return `This action returns all customer`;
+    return this.customerRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  async findOne(id: string): Promise<Customer> {
+    return await this.customerRepository.findOne(id);
   }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
+  update(id: string, updateCustomerDto: UpdateCustomerDto) {
     return `This action updates a #${id} customer`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} customer`;
   }
 }
