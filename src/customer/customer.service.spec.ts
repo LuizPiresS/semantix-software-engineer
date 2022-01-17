@@ -126,4 +126,12 @@ describe('CustomerService', () => {
       expect(result).toEqual([mockedCustomer]);
     });
   });
+
+  describe('findOne', () => {
+    it('should return customer', async () => {
+      const result = await customerService.findOne(mockedCustomer.id);
+
+      expect(result).toEqual(mockedCustomer);
+    });
+  });
 });
