@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateCustomerDto } from './dto/create-customer.dto';
+import { CreateCustomerResponseDto } from './dto/create-customer-response.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from './entities/customer.entity';
 import { Repository } from 'typeorm';
@@ -17,8 +18,11 @@ export class CustomerService {
     @InjectRepository(Customer)
     private customerRepository: Repository<Customer>,
   ) {}
-  async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
+  async create(
+    createCustomerDto: CreateCustomerDto,
+  ): Promise<CreateCustomerResponseDto> {
     try {
+      this.logger.log('Creating customer');
       if (
         !createCustomerDto.name ||
         !createCustomerDto.email ||
@@ -27,10 +31,16 @@ export class CustomerService {
       ) {
         throw new BadRequestException('Missing data');
       }
-
-      return this.customerRepository.save(
+      const response = await this.customerRepository.save(
         this.customerRepository.create(createCustomerDto),
       );
+      const { email, name, phoneNumber } = response;
+      const createCustomerResponseDto: CreateCustomerResponseDto = {
+        email,
+        name,
+        phoneNumber,
+      };
+      return createCustomerResponseDto;
     } catch (error) {
       this.logger.error(error);
       throw new Error("Can't create customer");
@@ -61,6 +71,14 @@ export class CustomerService {
     }
   }
 
+  async findOneByEmail(email: string): Promise<Customer> {
+    try {
+      return await this.customerRepository.findOne({ email });
+    } catch (error) {
+      this.logger.error(error.stack);
+      throw new Error("Can't find customer");
+    }
+  }
   async update(id: string, updateCustomerDto: UpdateCustomerDto) {
     try {
       return await this.customerRepository.update(id, updateCustomerDto);

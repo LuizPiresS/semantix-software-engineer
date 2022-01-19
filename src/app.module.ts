@@ -5,6 +5,7 @@ import { configService } from './config/config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerModule } from './customer/customer.module';
 import { Customer } from './customer/entities/customer.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { Customer } from './customer/entities/customer.entity';
     CustomerModule,
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     TypeOrmModule.forFeature([Customer]),
+    AuthModule,
   ],
   controllers: [],
   providers: [CustomerService],

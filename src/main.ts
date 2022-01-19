@@ -11,6 +11,7 @@ async function bootstrap() {
   app.use(helmet());
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Semantix API')
     .setVersion('0.0.1')
     .build();
