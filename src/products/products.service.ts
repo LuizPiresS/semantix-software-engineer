@@ -1,21 +1,33 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {
   logger = new Logger(ProductsService.name);
-  create(createProductDto: CreateProductDto) {
+
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) {}
+  async create(createProductDto: CreateProductDto) {
     this.logger.log('createProductDto', createProductDto);
-    return {
-      id: 'valid uuid',
-      name: 'valid name',
-      price: 1,
-      stock: 1,
-      createdAt: new Date().toDateString(),
-      updatedAt: new Date().toDateString(),
-      deletedAt: null,
-    };
+    try {
+      const response = await this.productRepository.save(
+        this.productRepository.create(createProductDto),
+      );
+      return response;
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException();
+    }
   }
 
   findAll() {
