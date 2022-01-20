@@ -31,7 +31,10 @@ export class ProductsService {
   }
 
   findAll() {
-    return `This action returns all products`;
+    return [
+      { id: 'valid uuid', name: 'valid name', price: 1, stock: 1 },
+      { id: 'valid uuid', name: 'valid name', price: 1, stock: 1 },
+    ];
   }
 
   findOne(id: number) {
