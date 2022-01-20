@@ -1,3 +1,4 @@
+import { CreateCustomerResponseDto } from './dto/create-customer-response.dto';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -26,6 +27,8 @@ describe('CustomerService', () => {
             save: jest.fn().mockResolvedValue(mockedCustomer),
             find: jest.fn().mockReturnValue([mockedCustomer]),
             findOne: jest.fn().mockReturnValue(mockedCustomer),
+            update: jest.fn().mockResolvedValue(mockedCustomer),
+            delete: jest.fn().mockReturnValue('deleted'),
           },
         },
       ],
@@ -42,11 +45,9 @@ describe('CustomerService', () => {
   });
 
   describe('create', () => {
-    const mockedCustomer = {
-      id: 'valid uuid',
+    const mockedCustomer: CreateCustomerResponseDto = {
       name: 'valid name',
       email: 'valid@email.com',
-      password: 'validPassword',
       phoneNumber: '53991826270',
     };
     it('should must customer data after being registered', async () => {
@@ -119,19 +120,36 @@ describe('CustomerService', () => {
     });
   });
 
-  describe('findAll', () => {
-    it('should return all customers', async () => {
-      const result = await customerService.findAll();
-
-      expect(result).toEqual([mockedCustomer]);
-    });
-  });
-
   describe('findOne', () => {
     it('should return customer', async () => {
       const result = await customerService.findOne(mockedCustomer.id);
 
       expect(result).toEqual(mockedCustomer);
+    });
+  });
+
+  describe('update', () => {
+    it('should update customer data', async () => {
+      const updatedCustomerMock = {
+        name: 'updated name',
+        email: 'updated@email.com',
+        password: 'updatedPassword',
+        phoneNumber: 'updatedPhoneNumber',
+      };
+      const result = await customerService.update(
+        mockedCustomer.id,
+        updatedCustomerMock,
+      );
+
+      expect(result).toEqual(mockedCustomer);
+    });
+  });
+
+  describe('update', () => {
+    it('should update customer data', async () => {
+      const result = await customerService.remove(mockedCustomer.id);
+
+      expect(result).toBe('deleted');
     });
   });
 });
