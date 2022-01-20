@@ -25,7 +25,7 @@ export class ProductsService {
       );
       return response;
     } catch (error) {
-      this.logger.error(error.message);
+      this.logger.error(error);
       throw new InternalServerErrorException();
     }
   }
