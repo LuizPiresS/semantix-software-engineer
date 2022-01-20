@@ -1,38 +1,90 @@
-# Backend Code Challenge
+# [Backend Code Challenge](https://github.com/LuizPiresS/semantix-software-engineer)
 
-> 📙 Esse teste é mais qualitativo do que quantitativo, vamos levar em consideração a qualidade do código e não somente o número de etapas concluídas.
+## Description
 
-## Estória de usuário
+Backend Code Challenge - CRUD de Clientes e Produtos
 
-A empresa XPTO precisa de uma aplicação capaz de gerenciar o processo de compra de produtos de seus clientes. O gerente de projetos conversou com as partes interessadas e levantou o seguintes requisitos:
+A ideia deste projeto consiste em demonstrar como desenvolvo em meu dia a dia.
 
-* A aplicação deve ser capaz de listar, cadastrar, atualizar e deletar um produto, cliente e compra.
-* A aplicação deve ser capaz de filtrar as compras por cliente.
-* A aplicação deve ser capaz de listar as compras de um cliente por dia, mês e ano.
-* A aplicação deve ser capaz de listar de forma ordenada os produtos mais vendidos por dia, mês e ano.
-* A aplicação deve ser capaz de listar de forma ordenada os clientes que mais gastam por dia, mês e ano.
-* A quantidade em estoque de um produto deve ser subtraída na efetivação de uma compra.
-* O cliente deve ter no mínimo as seguintes propriedades: nome, telefone e email.
-* O produto deve conter as seguintes propriedades: nome, quantidade em estoque e preço.
+Analiso pontos como segurança, testes e documentação que acredito serem os
 
-## Requisitos de aceite
+pilares de um bom produto e de uma real entrega de valor.
 
-Para facilitar a implementação e manutenções futuras, a equipe técnica da empresa XPTO listou algumas especificações que devem ser atendidas para a implementação da aplicação e outras que seriam atrativas.
+## Technologies used
 
-* Deve ser desenvolvida em algumas das linguagens: NodeJS, Elixir, Python, Golang.
-* Deve ser documentado as instruções de como construir, rodar e quais são funcionalidades contempladas e como funcionam.
-* Pode ser utilizado qualquer framework que facilite o desenvolvimento.
-* Pode conter migrations para o gerenciamento das tabelas no banco de dados.
-* Pode conter testes unitários ou de integração.
-* Podem ser inseridos mensagens de logs para a rastreabilidade de erros
-* Pode ser implementado a captura de exceções para evitar comportamentos inesperados.
+### Framework
 
-Para facilitar o desenvolvimento desse desafio, recomendamos o uso do [ElephantSQL](https://www.elephantsql.com/). Ele provisiona uma instância de Postgresql gratuitamente. E se quiser, pode usar o ambiente de desenvolvimento da [StackBlitz](https://stackblitz.com) (somente para NodeJS).
+- [NestJS](https://nestjs.com/)
 
-## Submissão
+### Software quality
 
-Envie um email para andre.ravazzi[at]semantix.com.br com o link para um repositório público do Github com a solução do desafio. No título do email coloque "{Seu nome} - Code Challenge Back-end"
+- [Husky](https://github.com/typicode/husky)
+- [git-commit-msg-linter](https://github.com/legend80s/commit-msg-linter)
+- [lint-staged](https://github.com/okonet/lint-staged)
 
-## Contribuição
+### Software security
 
-Teste criado por [@itlima](https://github.com/itlima) e [@peguera-eu](https://github.com/peguera-eu)
+- [Helmet](https://helmetjs.github.io/)
+- [Cors](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/CORS)
+- [Rate Limiting](https://docs.nestjs.com/security/rate-limiting)
+
+### Database
+
+- [Postgres](https://www.postgresql.org/)
+
+### Deploy
+
+- [Docker](https://www.docker.com/)
+
+## Instructions
+
+### Ambiente de desenvolvimento
+
+Nome: Remote - Containers
+
+Descrição: Open any folder or repository inside a Docker container and take advantage of Visual Studio Code's full feature set.
+
+Versão: 0.209.6
+
+Editor: Microsoft
+
+Link do Marketplace do VS:
+
+<https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers>
+
+### Press the F1 key and search for "Remote-Containers: Open Folder in Container"
+
+```bash
+npm run start:dev
+
+```
+
+## Versioning
+
+- [GIT](https://git-scm.com/)
+
+- [Repository](https://github.com/LuizPiresS/semantix-software-engineer)
+
+## Documentation
+
+- [Documentation](http://localhost:3000/documentation/#/)
+
+## Test
+
+- [Swagger](http://localhost:3000/documentation/#/)
+
+```bash
+
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
+```
+
+## License
+
+[MIT licensed](LICENSE).
