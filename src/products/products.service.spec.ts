@@ -33,10 +33,10 @@ describe('ProductsService', () => {
           useValue: {
             create: jest.fn().mockReturnValue(mockedProduct),
             save: jest.fn().mockResolvedValue(mockedProduct),
-            find: jest.fn().mockReturnValue([mockedProduct]),
-            findOne: jest.fn().mockReturnValue(mockedProduct),
-            update: jest.fn().mockResolvedValue(mockedProduct),
-            delete: jest.fn().mockReturnValue('deleted'),
+            // find: jest.fn().mockReturnValue([mockedProduct]),
+            // findOne: jest.fn().mockReturnValue(mockedProduct),
+            // update: jest.fn().mockResolvedValue(mockedProduct),
+            // delete: jest.fn().mockReturnValue('deleted'),
           },
         },
       ],
@@ -59,7 +59,7 @@ describe('ProductsService', () => {
     });
 
     it('should throw exception if invalid request', async () => {
-      jest.spyOn(productRepository, 'save').mockRejectedValueOnce(new Error());
+      jest.spyOn(productService, 'create').mockRejectedValueOnce(new Error());
       const invalidRequest = {
         price: 1,
         stock: 1,
@@ -67,6 +67,16 @@ describe('ProductsService', () => {
       await expect(
         productService.create(invalidRequest),
       ).rejects.toThrowError();
+    });
+  });
+
+  describe('find all products', () => {
+    it('should return all products', async () => {
+      const products = await productService.findAll();
+      expect(products).toEqual([
+        { id: 'valid uuid', name: 'valid name', price: 1, stock: 1 },
+        { id: 'valid uuid', name: 'valid name', price: 1, stock: 1 },
+      ]);
     });
   });
 });
