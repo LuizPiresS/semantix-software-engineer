@@ -6,7 +6,7 @@ import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
 
 describe('ProductsService', () => {
-  let service: ProductsService;
+  let productService: ProductsService;
   let productRepository: Repository<Product>;
   const mockedProduct: Product = {
     id: 'valid uuid',
@@ -42,17 +42,31 @@ describe('ProductsService', () => {
       ],
     }).compile();
 
-    service = module.get<ProductsService>(ProductsService);
+    productService = module.get<ProductsService>(ProductsService);
+    productRepository = module.get<Repository<Product>>(
+      getRepositoryToken(Product),
+    );
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(productService).toBeDefined();
   });
 
   describe('create new product', () => {
     it('should return a product', async () => {
-      const product = await service.create(mockedProductRequest);
+      const product = await productService.create(mockedProductRequest);
       expect(product).toEqual(mockedProduct);
+    });
+
+    it('should throw exception if invalid request', async () => {
+      jest.spyOn(productRepository, 'save').mockRejectedValueOnce(new Error());
+      const invalidRequest = {
+        price: 1,
+        stock: 1,
+      } as CreateProductDto;
+      await expect(
+        productService.create(invalidRequest),
+      ).rejects.toThrowError();
     });
   });
 });
