@@ -9,31 +9,40 @@ import { AuthModule } from './auth/auth.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ProductsModule } from './products/products.module';
+import { Product } from './products/entities/product.entity';
+import { ProductsService } from './products/products.service';
 
 @Module({
   imports: [
-    ConfigModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
     ThrottlerModule.forRoot({
       ttl: +process.env.THROTTLER_TTL,
       limit: +process.env.THROTTLER_LIMIT,
     }),
-    CustomerModule,
+
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     TypeOrmModule.forFeature([Customer]),
-    AuthModule,
+    TypeOrmModule.forFeature([Product]),
+
+    CustomerModule,
     ProductsModule,
+    AuthModule,
+    ConfigModule,
   ],
+
   controllers: [],
+
   providers: [
+    ProductsService,
     CustomerService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
   ],
-  exports: [CustomerService],
+  exports: [CustomerService, ProductsService],
 })
 export class AppModule {}

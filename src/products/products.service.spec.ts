@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
@@ -54,8 +53,8 @@ describe('ProductsService', () => {
             save: jest.fn().mockResolvedValue(mockedProduct),
             find: jest.fn().mockReturnValue(mockedResultProductsPaginated),
             findOne: jest.fn().mockReturnValue(mockedProduct),
-            // update: jest.fn().mockResolvedValue(mockedProduct),
-            // delete: jest.fn().mockReturnValue('deleted'),
+            update: jest.fn().mockResolvedValue(mockedProduct),
+            delete: jest.fn().mockReturnValue('deleted'),
           },
         },
       ],
@@ -118,6 +117,25 @@ describe('ProductsService', () => {
       const result = await productService.findOne(mockedProduct.id);
 
       expect(result).toEqual(mockedProduct);
+    });
+  });
+
+  describe('update product', () => {
+    it('should update product', async () => {
+      const result = await productService.update(
+        mockedProduct.id,
+        mockedProductRequest,
+      );
+
+      expect(result).toEqual(mockedProduct);
+    });
+  });
+
+  describe('delete', () => {
+    it('should update product data', async () => {
+      const result = await productService.remove(mockedProduct.id);
+
+      expect(result).toBe('deleted');
     });
   });
 });

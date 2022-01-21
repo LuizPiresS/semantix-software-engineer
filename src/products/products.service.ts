@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -23,8 +24,9 @@ export class ProductsService {
     private readonly productRepository: Repository<Product>,
   ) {}
   async create(createProductDto: CreateProductDto) {
-    this.logger.log('createProductDto', createProductDto);
     try {
+      this.logger.log('creating product');
+
       const response = await this.productRepository.save(
         this.productRepository.create(createProductDto),
       );
@@ -40,15 +42,17 @@ export class ProductsService {
     orderBy = 'name',
   ): Promise<Pagination<Product>> {
     try {
+      this.logger.log('looking for all products');
       const queryBuilder = this.productRepository.createQueryBuilder('product');
       queryBuilder.select([
         'product.id',
         'product.name',
         'product.price',
         'product.stock',
+        'product.created_at',
       ]);
 
-      queryBuilder.orderBy(`product.${orderBy}`, 'ASC');
+      queryBuilder.orderBy(`product.${orderBy}`, 'DESC');
 
       return await paginate<Product>(queryBuilder, options);
     } catch (error) {
@@ -59,18 +63,40 @@ export class ProductsService {
 
   async findOne(id: string) {
     try {
-      return await this.productRepository.findOne(id);
+      this.logger.log('looking for product with id: ', id);
+      const product = await this.productRepository.findOne(id);
+      if (!product) {
+        this.logger.error(`Can't find product with id: ${id}`);
+        throw new NotFoundException("Can't find product");
+      }
+      return product;
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException("Can't find product");
     }
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    try {
+      const product = await this.productRepository.findOne(id);
+      if (!product) {
+        throw new NotFoundException("Can't find product");
+      }
+      await this.productRepository.update(id, updateProductDto);
+      return await this.productRepository.findOne(id);
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException("Can't update product");
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: string) {
+    try {
+      await this.productRepository.delete(id);
+      return 'deleted';
+    } catch (error) {
+      this.logger.error(error);
+      throw new Error("Can't delete product");
+    }
   }
 }
