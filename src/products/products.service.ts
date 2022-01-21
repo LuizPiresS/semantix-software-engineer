@@ -4,6 +4,11 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -30,15 +35,35 @@ export class ProductsService {
     }
   }
 
-  findAll() {
-    return [
-      { id: 'valid uuid', name: 'valid name', price: 1, stock: 1 },
-      { id: 'valid uuid', name: 'valid name', price: 1, stock: 1 },
-    ];
+  async findAll(
+    options: IPaginationOptions,
+    orderBy = 'name',
+  ): Promise<Pagination<Product>> {
+    try {
+      const queryBuilder = this.productRepository.createQueryBuilder('product');
+      queryBuilder.select([
+        'product.id',
+        'product.name',
+        'product.price',
+        'product.stock',
+      ]);
+
+      queryBuilder.orderBy(`product.${orderBy}`, 'ASC');
+
+      return await paginate<Product>(queryBuilder, options);
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException("Can't find all products");
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string) {
+    try {
+      return await this.productRepository.findOne(id);
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException("Can't find product");
+    }
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
