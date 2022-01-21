@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
@@ -18,6 +19,24 @@ describe('ProductsService', () => {
     deletedAt: null,
   };
 
+  const mockedResultProductsPaginated = {
+    items: [
+      {
+        id: '3d99150d-d509-472c-9a15-a520940ef103',
+        name: 'teste',
+        price: 11111,
+        stock: 1,
+      },
+    ],
+    meta: {
+      totalItems: 1,
+      itemCount: 1,
+      itemsPerPage: 10,
+      totalPages: 1,
+      currentPage: 1,
+    },
+  };
+
   const mockedProductRequest: CreateProductDto = {
     name: 'valid name',
     price: 1,
@@ -33,8 +52,8 @@ describe('ProductsService', () => {
           useValue: {
             create: jest.fn().mockReturnValue(mockedProduct),
             save: jest.fn().mockResolvedValue(mockedProduct),
-            // find: jest.fn().mockReturnValue([mockedProduct]),
-            // findOne: jest.fn().mockReturnValue(mockedProduct),
+            find: jest.fn().mockReturnValue(mockedResultProductsPaginated),
+            findOne: jest.fn().mockReturnValue(mockedProduct),
             // update: jest.fn().mockResolvedValue(mockedProduct),
             // delete: jest.fn().mockReturnValue('deleted'),
           },
@@ -70,13 +89,35 @@ describe('ProductsService', () => {
     });
   });
 
-  describe('find all products', () => {
-    it('should return all products', async () => {
-      const products = await productService.findAll();
-      expect(products).toEqual([
-        { id: 'valid uuid', name: 'valid name', price: 1, stock: 1 },
-        { id: 'valid uuid', name: 'valid name', price: 1, stock: 1 },
-      ]);
+  // describe('find all products', () => {
+  //   it('should return all products', async () => {
+  //     const itemList = [mockedProduct];
+  //     jest.mock('nestjs-typeorm-paginate', () => ({
+  //       paginate: jest.fn().mockResolvedValue({
+  //         paginate: jest.fn().mockResolvedValue({
+  //           items: itemList.slice(0, 2),
+  //           meta: {
+  //             itemCount: 2,
+  //             totalItems: 2,
+  //             totalPages: 1,
+  //             currentPage: 1,
+  //           },
+  //         }),
+  //       }),
+  //     }));
+  //     const productsPaginated = await productService.findAll(
+  //       { page: 1, limit: 10 },
+  //       'name',
+  //     );
+
+  //     expect(productsPaginated).toEqual(mockedResultProductsPaginated);
+  //   });
+  // });
+  describe('findOne product', () => {
+    it('should return product', async () => {
+      const result = await productService.findOne(mockedProduct.id);
+
+      expect(result).toEqual(mockedProduct);
     });
   });
 });
