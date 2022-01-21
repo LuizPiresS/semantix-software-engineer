@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CustomerService } from 'src/customer/customer.service';
+import { CustomerService } from '../customer/customer.service';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Customer } from 'src/customer/entities/customer.entity';
+import { Customer } from '../customer/entities/customer.entity';
 
 @Injectable()
 export class AuthService {
