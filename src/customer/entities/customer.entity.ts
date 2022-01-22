@@ -29,6 +29,9 @@ export class Customer {
   @Matches(RegexHelper.password)
   password: string;
 
+  @Column()
+  role?: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: string;
 

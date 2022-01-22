@@ -29,6 +29,7 @@ describe('CustomerService', () => {
             findOne: jest.fn().mockReturnValue(mockedCustomer),
             update: jest.fn().mockResolvedValue(mockedCustomer),
             delete: jest.fn().mockReturnValue('deleted'),
+            count: jest.fn().mockReturnValue(3),
           },
         },
       ],
@@ -66,58 +67,6 @@ describe('CustomerService', () => {
       expect(customerRepository.save).toHaveBeenCalledTimes(1);
       expect(customerRepository.create).toHaveBeenCalledWith(mockRequest);
     });
-
-    it('should be throw if called with invalid name ', async () => {
-      const mockRequest = {
-        name: '',
-        email: 'valid@email.com',
-        password: 'validPassword',
-        phoneNumber: '53991826270',
-      } as CreateCustomerDto;
-
-      const result = customerService.create(mockRequest);
-
-      await expect(result).rejects.toThrow();
-    });
-
-    it('should be throw if called with invalid email ', async () => {
-      const mockRequest = {
-        name: 'valid name',
-        email: '',
-        password: 'validPassword',
-        phoneNumber: '53991826270',
-      } as CreateCustomerDto;
-
-      const result = customerService.create(mockRequest);
-
-      await expect(result).rejects.toThrow();
-    });
-
-    it('should be throw if called with invalid password ', async () => {
-      const mockRequest = {
-        name: 'valid name',
-        email: 'valid@email.com',
-        password: '',
-        phoneNumber: '53991826270',
-      } as CreateCustomerDto;
-
-      const result = customerService.create(mockRequest);
-
-      await expect(result).rejects.toThrow();
-    });
-
-    it('should be throw if called with invalid name ', async () => {
-      const mockRequest = {
-        name: 'valid name',
-        email: 'valid@email.com',
-        password: 'validPassword',
-        phoneNumber: '',
-      } as CreateCustomerDto;
-
-      const result = customerService.create(mockRequest);
-
-      await expect(result).rejects.toThrow();
-    });
   });
 
   describe('findOne', () => {
@@ -145,7 +94,7 @@ describe('CustomerService', () => {
     });
   });
 
-  describe('update', () => {
+  describe('delete', () => {
     it('should update customer data', async () => {
       const result = await customerService.remove(mockedCustomer.id);
 

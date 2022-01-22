@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsPhoneNumber, Matches } from 'class-validator';
-import { MessageHelper } from 'src/helpers/messages.helper';
-import { RegexHelper } from 'src/helpers/regex.helper';
+import { MessageHelper } from '../../helpers/messages.helper';
+import { RegexHelper } from '../../helpers/regex.helper';
 
 export class CreateCustomerDto {
   @ApiProperty()
@@ -22,4 +22,6 @@ export class CreateCustomerDto {
     message: MessageHelper.INVALID_PASSWORD,
   })
   password: string;
+
+  role?: string;
 }
