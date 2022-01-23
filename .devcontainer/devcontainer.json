@@ -7,6 +7,11 @@
     "terminal.integrated.shell.linux": "/bin/zsh"
   },
   "extensions": [
+    "2gua.rainbow-brackets",
+    "roerohan.mongo-snippets-for-node-js",
+    "ckolkman.vscode-postgres",
+    "stringham.move-ts",
+    "mongodb.mongodb-vscode",
     "dbaeumer.vscode-eslint",
     "prettier.prettier-vscode",
     "streetsidesoftware.code-spell-checker",
