@@ -47,6 +47,9 @@ class ConfigService {
       },
       synchronize: true,
       ssl: this.isProduction(),
+
+      logging: ['error', 'warn'],
+      logger: 'file',
     };
   }
 }
