@@ -7,6 +7,7 @@
     "terminal.integrated.shell.linux": "/bin/zsh"
   },
   "extensions": [
+    "GitHub.copilot",
     "2gua.rainbow-brackets",
     "roerohan.mongo-snippets-for-node-js",
     "ckolkman.vscode-postgres",
